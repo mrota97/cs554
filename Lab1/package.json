@@ -1,0 +1,19 @@
+{
+  "name": "rota-matthew-cs554-lab1",
+  "version": "1.0.0",
+  "description": "Lab 1 for CS-554 Web Programming II",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matt Rota",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongodb": "^3.0.4",
+    "node-uuid": "^1.4.8",
+    "npm": "^5.7.1"
+  }
+}
