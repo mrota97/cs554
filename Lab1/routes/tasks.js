@@ -24,6 +24,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
 	const task = req.body;
 	try {
+		if (Object.keys(replacement).length != 5) throw "You must provide all arguments in the body!";		
 		const { title, description, hoursEstimated, completed, comments } = task;
 		const newTask = await taskData.addTask(title, description, hoursEstimated, completed, comments);
 		res.status(200).json(newTask);
@@ -35,7 +36,8 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
 	const replacement = req.body;
 	try {
-		const { title, description, hoursEstimated, completed, comments } = replacement;
+		if (Object.keys(replacement).length != 4) throw "You must provide all arguments in the body!";
+		const { title, description, hoursEstimated, completed } = replacement;
 		const replacedTask = await taskData.replaceTask(req.params.id, title, description, hoursEstimated, completed, comments);
 		res.status(200).json(replacedTask)
 	} catch (e) {

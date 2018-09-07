@@ -44,7 +44,7 @@ const exportedMethods = {
 
 		} catch (e) {}
 	},
-	async replaceTask(id, title, description, hoursEstimated, completed, comments) {
+	async replaceTask(id, title, description, hoursEstimated, completed) {
 		if (typeof title !== "string" || title == "") throw "Please provide a valid title";
 		if (typeof description !== "string" || description == "") throw "Please provide a valid description";		
 		if (typeof hoursEstimated !== "number" || hoursEstimated < 0) throw "Please provide a valid time (in hours)";
@@ -79,7 +79,6 @@ const exportedMethods = {
 			if (info.description) freshTask.description = info.description;
 			if (info.hoursEstimated) freshTask.hoursEstimated = info.hoursEstimated;
 			if (info.completed) freshTask.completed = info.completed;
-			if (info.comments) freshTask.comments = info.comments;
 
 			const updated = await taskCollection.findOneAndUpdate({ _id: id}, { $set: freshTask });
 			if (updated.value == null) throw "A task with that id could not be found in the database.";
