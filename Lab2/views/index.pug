@@ -1,0 +1,75 @@
+mixin modal(title, text, modalName)
+    .modal.fade(id= modalName, tabindex="-1", role="dialog", aria-hidden="true")
+        .modal-dialog(role="document")
+            .modal-content
+                .modal-header
+                    h1.modal-title= title
+                .modal-body
+                    p= text
+                .modal-footer
+                    button.btn.btn-secondary(type="button", data-dismiss="modal") Close
+
+mixin card(id, name, imgSrc, text, dataTarget)
+    .card(id= id)
+        h1.card-header.background-russian-green= name
+        img.card-img-top(src= imgSrc, alt= name)
+        .card-body
+            p.card-text= text
+            button.bt.btn-primary(type="button", data-toggle="modal", data-target= dataTarget) Learn more
+ 
+doctype html
+html(lang="en")
+    head
+        title Matt Rota | Home
+        meta(charset="utf-8")
+        include includes/scripts.pug
+    body
+        .container-fluid
+            nav.navbar.navbar-expand-lg.border-bottom.background-vermillion
+                h1.navbar-brand Welcome to my site!
+            .row
+                .col-md-2.col-sm-12
+                    ul.nav.flex-column.sticky-top
+                        -
+                            var products = {"Black Hole Vacuum": "#black-hole-vacuum", "Time-Agnostic-Mobile": "#time-agnostic-mobile", "BriteDisk": "#brite-disk", "SpongeAway": "#sponge-away", "World's Most Useless Paperweight": "#useless-paperweight", "Lay's Silicon Variety Chips": "#lays-silicon", "Ins-toast-aneous": "#instoastaneous", "PizzaSlice": "#pizza-cutter", "Chocolate Applicator (for Milk)": "#chocolate-applicator", "ElectronicFunnel": "#electronic-funnel"}
+                        each val, index in products
+                            li.nav-item
+                                a.nav-link(href= val)= index
+                .col-md-10.col-sm-12.border-left
+                    .row
+                        .col-lg-4.col-md-6.col-sm-12
+                            +card("#black-hole-vacuum", "Black Hole Vacuum", "./img/black_hole.jpg", "This thing definitely does(n't) suck!", "#bhvModal")
+                            +modal("Black Hole Vacuum", "Have you ever spilled 1000 lbs of dry white rice on the floor and found out the hard way that your puny, underpowered vacuum just isn't cutting it? Fear not, our Black Hole Vacuum will help you get back to cleaning your ever-present messes faster than you can make another one!", "bhvModal")
+                        .col-lg-4.col-md-6.col-sm-12
+                            +card("#time-agnostic-mobile", "Time-Agnostic-Mobile", "./img/delorean.jpg", "This car is ahead of the times!", "#tamModal")
+                            +modal("Time-Agnostic-Mobile", "Doc: Unfortunately it requires something with a little more kick: plutonium. Marty: Oh, plutonium. Whoa Doc, do you mean to tell me this sucker is nuclear?! Doc: No, no, no, no. This sucker's electrical, but I need a nuclear reaction to- to generate the 1.21 gigawatts of electricity I need.", "tamModal")                                    
+                        .col-lg-4.col-md-6.col-sm-12
+                            +card("#brite-disk", "BriteDisk", "./img/frisbee.jpg", "Practice your wrist flicks any time!", "#bdModal")
+                            +modal("BriteDisk", "With our new photon-emitting technology, daylight be damned! Fling around our BriteDisk wherever, and whenever, your desire to toss spinning circular disks into the air arises. DISCLAIMER: Not recommened for bovines.", "bdModal")                                    
+                        .col-lg-4.col-md-6.col-sm-12
+                            +card("#sponge-away", "SpongeAway", "./img/grater.jpeg", "Exfoliate your kitchenware!", "#saModal")
+                            +modal("SpongeAway", "So your roommate just finished cleaning the pots and pans he used to make food last week, and you come back to find your sponge covered in poorly aged food residue and bacterial growth. SpongeAway to the rescue! Now you too can finally cleaning your cleaning utensil! Our patented grating technology will leave your sponge matter-free!", "saModal")                                    
+                        .col-lg-4.col-md-6.col-sm-12
+                            +card("#useless-paperweight", "World's Most Useless Paperweight", "./img/water.jpg", "Can't get much more useless than this!", "#upModal")
+                            +modal("Black Hole Vacuum", "No more will your papers fly away in a gust! This paperweight will take a weight of worry off your mind. We're cleaning up the competition!", "upModal")                                    
+                        .col-lg-4.col-md-6.col-sm-12
+                            +card("#lays-silicon", "Lay's Silicon Variety Chips", "./img/chips.jpg", "Crunchy!", "#lsModal")
+                            +modal("Lay's Silicon Variety Chips", "Not only do these silicon spud slivers taste good, they also will boost your IQ by at least one standard deviation, we guarentee it!", "lsModal")                                    
+                        .col-lg-4.col-md-6.col-sm-12
+                            +card("#instoastaneous", "Ins-toast-aneous!", "./img/instanttoast.jpg", "Toast has never been toasted faster!", "#itModal")
+                            +modal("Ins-toast-aneous", "Are you tired of waiting 30 seconds for your toast to, well... toast? The newest model of our Ins-toast-aneous has been proven to shave 29.5 seconds off your average toaster's toasting technology!", "itModal")                                    
+                        .col-lg-4.col-md-6.col-sm-12
+                            +card("#pizza-cutter", "PizzaSlice", "./img/pizza.jpg", "I totally created this original product for a completely intended use!", "#psModal")
+                            +modal("PizzaSlice", "With our nifty pizza cutting tool, you can have your pizza, eat it, and measure it too!", "psModal")                                    
+                        .col-lg-4.col-md-6.col-sm-12
+                            +card("#chocolate-applicator", "Chocolate Applicator (for Milk)", "./img/puff.jpg", "Turn your bowl of milk tasty with these nifty chocolate containment units!", "#caModal")
+                            +modal("Chocolate Applicator (for Milk)", "Now you too can have chocolate milk in the comfort of your own home! Simply apply our chocolate containers to any bowl-sized container of milk, wait 10 minutes, and strain. Got chocolate milk?", "caModal")                                    
+                        .col-lg-4.col-md-6.col-sm-12
+                            +card("#electronic-funnel", "ElectronicFunnel", "./img/hopper.jpg", "Inject soundwaves into your ingredients!", "#efModal")
+                            +modal("ElectronicFunnel", "You're gonna like the sound of this product! Human engineering and food science at its peak: you've heard of areated food... now you can enjoy acoustic food, with our ElectronicFunnel!", "efModal")
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script src="./js/tota11y.min.js"></script>
+        //- include includes/navbar.pug
