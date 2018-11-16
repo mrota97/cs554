@@ -1,0 +1,15 @@
+{
+  "name": "lab6",
+  "version": "1.0.0",
+  "description": "This is lab 6 for CS-554.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matt Rota",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.16.0",
+    "@types/mongodb": "^3.1.14"
+  }
+}
