@@ -1,8 +1,10 @@
-const router = express.Router();
+import * as express from "express";
+import * as mongodb from "mongodb";
+const router: express.Router = express.Router();
 const data = require("../data");
 const taskData = data.tasks;
 
-router.get("/", async (req, res) => {
+router.get("/", async (req: express.Request, res: express.Response) => {
 	try {
 		const taskList = await taskData.getTasks(req.query.skip, req.query.take);
 		res.json(taskList);
@@ -11,7 +13,7 @@ router.get("/", async (req, res) => {
 	}
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req: express.Request, res: express.Response) => {
 	try {
 		const task = await taskData.getTaskById(req.params.id);
 		res.json(task);
@@ -20,10 +22,10 @@ router.get("/:id", async (req, res) => {
 	}
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req: express.Request, res: express.Response) => {
 	const task = req.body;
 	try {
-		if (Object.keys(replacement).length != 5) throw "You must provide all arguments in the body!";		
+		if (Object.keys(task).length != 5) throw "You must provide all arguments in the body!";		
 		const { title, description, hoursEstimated, completed, comments } = task;
 		const newTask = await taskData.addTask(title, description, hoursEstimated, completed, comments);
 		res.status(200).json(newTask);
@@ -32,11 +34,11 @@ router.post("/", async (req, res) => {
 	}
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", async (req: express.Request, res: express.Response) => {
 	const replacement = req.body;
 	try {
 		if (Object.keys(replacement).length != 4) throw "You must provide all arguments in the body!";
-		const { title, description, hoursEstimated, completed } = replacement;
+		const { title, description, hoursEstimated, completed, comments } = replacement;
 		const replacedTask = await taskData.replaceTask(req.params.id, title, description, hoursEstimated, completed, comments);
 		res.status(200).json(replacedTask)
 	} catch (e) {
@@ -44,7 +46,7 @@ router.put("/:id", async (req, res) => {
 	}
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", async (req: express.Request, res: express.Response) => {
 	const update = req.body;
 	try {
 		const updatedTask = await taskData.updateTask(req.params.id, update);
@@ -54,7 +56,7 @@ router.patch("/:id", async (req, res) => {
 	}
 });
 
-router.post("/:id/comments", async (req, res) => {
+router.post("/:id/comments", async (req: express.Request, res: express.Response) => {
 	const com = req.body;
 	try {
 		const { name, comment } = com;
@@ -65,7 +67,7 @@ router.post("/:id/comments", async (req, res) => {
 	}
 });
 
-router.delete("/:taskId/:commentId", async (req, res) => {
+router.delete("/:taskId/:commentId", async (req: express.Request, res: express.Response) => {
 	try {
 		await taskData.deleteComment(req.params.taskId, req.params.commentId);
 		res.sendStatus(200);

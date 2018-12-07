@@ -15,7 +15,7 @@ class UserListContainer extends React.Component {
     async search(params) {
         try {
             const users = await ApiService.getUsers(params);
-            this.setState({users});
+            this.setState(users);
         } catch (e) {
             console.error(`An error ${e.message} occured while searching users`);
         }

@@ -1,16 +1,32 @@
+import * as mongodb from "mongodb";
 const mongoCollections = require("../config/mongoCollections");
-const tasks = mongoCollections.tasks;
+const taskCollection = mongoCollections.tasks;
 const uuid = require("node-uuid");
 
+interface Task {
+	_id: string,
+	title:string,
+	description:string,
+	hoursEstimated:number,
+	completed:boolean,
+	comments:comment[]
+}
+
+interface comment {
+	_id:string,
+	name:string,
+	comment:string
+}
+
 const exportedMethods = {
-	async getTasks(s, t) {
-		if (!s) { var skip = 0 } else { var skip = parseInt(s) } 
-		if (!t) { var take = 20 } else { var take = Math.min(parseInt(t), 100) }
+	async getTasks(s: string, t: string): Promise<Array<Task>> {
+		if (!s) { var skip: number = 0 } else { var skip: number = parseInt(s) } 
+		if (!t) { var take: number = 20 } else { var take: number = Math.min(parseInt(t), 100) }
 
 		const taskCollection = await tasks();
 		return await taskCollection.find().limit(take).skip(skip).toArray();
 	},
-	async getTaskById(id) {
+	async getTaskById(id: string): Promise<Task> {
 		if (!id) throw "You must provide an id";
 		const taskCollection = await tasks();
 		const task = await taskCollection.findOne( { _id: id });
@@ -18,18 +34,17 @@ const exportedMethods = {
 		if (!task) throw "Task not found";
 		return task;
 	},
-	async addTask(title, description, hoursEstimated, completed, comments) {
+	async addTask(title: string, description: string, hoursEstimated: number, completed: boolean, comments: comment[]) {
 		if (typeof title !== "string" || title == "") throw "Please provide a valid title";
 		if (typeof description !== "string" || description == "") throw "Please provide a valid description";		
 		if (typeof hoursEstimated !== "number" || hoursEstimated < 0) throw "Please provide a valid time (in hours)";
 		if (typeof completed !== "boolean") throw "Completed must be true or false";
-		if (!comments instanceof Array) throw "Please provide a valid steps list";
-
+		// if (!comments instanceof Array) throw "Please provide a valid steps list";
 		try {
 			
 			const taskCollection = await tasks();
 
-			let newTask = {
+			let newTask: Task = {
 				_id: uuid.v4(),
 				title: title,
 				description: description,
@@ -44,12 +59,12 @@ const exportedMethods = {
 
 		} catch (e) {}
 	},
-	async replaceTask(id, title, description, hoursEstimated, completed) {
+	async replaceTask(id: string, title: string, description: string, hoursEstimated: number, completed: boolean, comments: comment[]): Promise<Task> {
 		if (typeof title !== "string" || title == "") throw "Please provide a valid title";
 		if (typeof description !== "string" || description == "") throw "Please provide a valid description";		
 		if (typeof hoursEstimated !== "number" || hoursEstimated < 0) throw "Please provide a valid time (in hours)";
 		if (typeof completed !== "boolean") throw "Completed must be true or false";
-		if (!comments instanceof Array) throw "Please provide a valid steps list";
+		// if (!comments instanceof Array) throw "Please provide a valid steps list";
 
 		try{
 			const taskCollection = await tasks();
@@ -68,12 +83,19 @@ const exportedMethods = {
 			return await this.getTaskById(id);		
 		} catch (e) {}
 	},
-	async updateTask(id, info) {
+	async updateTask(id: string, info: Task): Promise<Task> {
 		if (!id) throw "You must provide a valid id";
 		if (typeof info !== "object") throw "Please specify what you would like to update.";
 		try {
 			const taskCollection = await tasks();
-			let freshTask = {};
+			let freshTask: Task = {
+				_id: '',
+				title: '',
+				description: '',
+				hoursEstimated: 0,
+				completed: false,
+				comments: []
+			};
 
 			if (info.title) freshTask.title = info.title;
 			if (info.description) freshTask.description = info.description;
@@ -86,7 +108,7 @@ const exportedMethods = {
 			return await this.getTaskById(id);
 		} catch (e) {}
 	},
-	async addComment(id, name, comment) {
+	async addComment(id: String, name: String, comment: Comment): Promise<Task> {
 		if (!id) throw "Please provide a valid task ID";
 		if (typeof name !== "string" || name == "") throw "Please provide a valid comment name";
 		if (typeof comment !== "string" || comment == "") throw "Please provide a valid comment body";
@@ -94,7 +116,7 @@ const exportedMethods = {
 		try {
 			const taskCollection = await tasks();
 
-			let newComment = {
+			let newComment: comment = {
 				_id: uuid.v4(),
 				name: name,
 				comment: comment
@@ -106,7 +128,7 @@ const exportedMethods = {
 			return await this.getTaskById(id);
 		} catch (e) {}
 	},
-	async deleteComment(taskId, commentId) {
+	async deleteComment(taskId: String, commentId: String): Promise<Task> {
 		if (!taskId) throw "Please provide a valid task ID";
 		if (!commentId) throw "Please provide a valid comment ID";
 
@@ -116,7 +138,7 @@ const exportedMethods = {
 			const remove = taskCollection.updateOne({ _id: taskId}, { $pull: { comments: { _id: commentId }}});
 			// if (remove.value == null) throw "A task with that id could not be found in the database.";
 
-			return await this.getTaskById(id);
+			return await this.getTaskById(taskId);
 		} catch (e) {}
 	}
 }

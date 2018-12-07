@@ -90,3 +90,39 @@
 .todo__ulabel {
     margin-right: 5px;
 }
+
+.create__todo {
+    display: flex;
+    flex-direction: column;
+}
+
+.create__todo__formgroup {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.create__todo__label {
+    padding: 5px;
+}
+
+.create__todo__title {}
+.create__todo__asignee {}
+.create__todo__submit {
+    align-self: flex-end;
+}
+
+.menu {
+    /* width: 100%; */
+}
+.menu__list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    list-style: none;
+}
+.menu__list__element {
+    padding-right: 5px;
+}
+

@@ -6,7 +6,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const express = require("express");
+import * as express from "express";
 const router = express.Router();
 const data = require("../data");
 const taskData = data.tasks;
@@ -31,7 +31,7 @@ router.get("/:id", (req, res) => __awaiter(this, void 0, void 0, function* () {
 router.post("/", (req, res) => __awaiter(this, void 0, void 0, function* () {
     const task = req.body;
     try {
-        if (Object.keys(replacement).length != 5)
+        if (Object.keys(task).length != 5)
             throw "You must provide all arguments in the body!";
         const { title, description, hoursEstimated, completed, comments } = task;
         const newTask = yield taskData.addTask(title, description, hoursEstimated, completed, comments);
@@ -46,7 +46,7 @@ router.put("/:id", (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {
         if (Object.keys(replacement).length != 4)
             throw "You must provide all arguments in the body!";
-        const { title, description, hoursEstimated, completed } = replacement;
+        const { title, description, hoursEstimated, completed, comments } = replacement;
         const replacedTask = yield taskData.replaceTask(req.params.id, title, description, hoursEstimated, completed, comments);
         res.status(200).json(replacedTask);
     }

@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const mongoCollections = require("../config/mongoCollections");
-const tasks = mongoCollections.tasks;
+const taskCollection = mongoCollections.tasks;
 const uuid = require("node-uuid");
 const exportedMethods = {
     getTasks(s, t) {
@@ -49,8 +49,7 @@ const exportedMethods = {
                 throw "Please provide a valid time (in hours)";
             if (typeof completed !== "boolean")
                 throw "Completed must be true or false";
-            if (!comments instanceof Array)
-                throw "Please provide a valid steps list";
+            // if (!comments instanceof Array) throw "Please provide a valid steps list";
             try {
                 const taskCollection = yield tasks();
                 let newTask = {
@@ -69,7 +68,7 @@ const exportedMethods = {
             catch (e) { }
         });
     },
-    replaceTask(id, title, description, hoursEstimated, completed) {
+    replaceTask(id, title, description, hoursEstimated, completed, comments) {
         return __awaiter(this, void 0, void 0, function* () {
             if (typeof title !== "string" || title == "")
                 throw "Please provide a valid title";
@@ -79,8 +78,7 @@ const exportedMethods = {
                 throw "Please provide a valid time (in hours)";
             if (typeof completed !== "boolean")
                 throw "Completed must be true or false";
-            if (!comments instanceof Array)
-                throw "Please provide a valid steps list";
+            // if (!comments instanceof Array) throw "Please provide a valid steps list";
             try {
                 const taskCollection = yield tasks();
                 let freshTask = {
@@ -106,7 +104,14 @@ const exportedMethods = {
                 throw "Please specify what you would like to update.";
             try {
                 const taskCollection = yield tasks();
-                let freshTask = {};
+                let freshTask = {
+                    _id: '',
+                    title: '',
+                    description: '',
+                    hoursEstimated: 0,
+                    completed: false,
+                    comments: []
+                };
                 if (info.title)
                     freshTask.title = info.title;
                 if (info.description)
@@ -155,7 +160,7 @@ const exportedMethods = {
                 const taskCollection = yield tasks();
                 const remove = taskCollection.updateOne({ _id: taskId }, { $pull: { comments: { _id: commentId } } });
                 // if (remove.value == null) throw "A task with that id could not be found in the database.";
-                return yield this.getTaskById(id);
+                return yield this.getTaskById(taskId);
             }
             catch (e) { }
         });

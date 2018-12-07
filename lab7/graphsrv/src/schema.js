@@ -3,6 +3,7 @@ import Todos from './data/todos';
 import find from 'lodash/find';
 import filter from 'lodash/filter';
 import sumBy from 'lodash/sumBy';
+import uuidv4 from 'uuid/v4';
 import {
 GraphQLInt,
         GraphQLBoolean,
@@ -32,7 +33,7 @@ const UserType = new GraphQLObjectType({
             },
             todos: {
                 type: new GraphQLList(TodoType),
-                resolve: (user, args) => {
+                resolve: (user, args)    => {
                     return filter(Todos, todo => todo.userId === user.id);
                 }
             }
@@ -43,7 +44,7 @@ const TodoType = new GraphQLObjectType({
     name: 'Todo',
     description: 'Task for user',
     fields: () => ({
-            id: {type: new GraphQLNonNull(GraphQLInt)},
+            id: {type: new GraphQLNonNull(GraphQLString)},
             title: {type: GraphQLString},
             completed: {type: new GraphQLNonNull(GraphQLBoolean)},
             user: {
@@ -92,8 +93,38 @@ const TodoQueryRootType = new GraphQLObjectType({
         })
 });
 
+const TodoRootMutation = new GraphQLObjectType({
+    name: 'TodoRootMutation',
+    fields: () => ({
+        createTodo: {
+            type: TodoType,
+            args: {
+                userId: { type: new GraphQLNonNull(GraphQLInt)},
+                title: {type: GraphQLString},
+            },
+            resolve: (value, { userId, title }) => {        
+                let todo = {
+                    id: uuidv4(),
+                    title: title,
+                    completed: false,
+                    userId: userId
+                }
+                Todos.push(todo);
+                return todo;
+            }
+        },
+        updateTodo: {
+            type: TodoType,
+        },
+        deleteTodo: {
+            type: TodoType,
+        }
+    })
+});
+
 const schema = new GraphQLSchema({
     query: TodoQueryRootType,
+    mutation: TodoRootMutation
 });
 
 export default schema;

@@ -1,5 +1,5 @@
-const express = require("express");
-const app = express();
+import * as express from "express";
+const app: express.Application = express();
 const configRoutes = require("./routes");
 const bodyParser = require("body-parser");
 var urlCounter = {}
@@ -16,7 +16,7 @@ var logger = function(req, res, next) {
 }
 
 // Log how many times a URL has been requested before
-var counter = function(req, res, next) {
+var counter = function(req: express.Request, res: express.Response, next) {
 	if (req.originalUrl in urlCounter) {
 		urlCounter[req.originalUrl] += 1;
 	} else {
@@ -32,6 +32,8 @@ app.use(logger);
 app.use(counter);
 
 configRoutes(app);
+
+
 
 app.listen(3000, () => {
 	console.log("The express server has been launched.");

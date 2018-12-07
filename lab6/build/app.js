@@ -1,4 +1,4 @@
-const express = require("express");
+import * as express from "express";
 const app = express();
 const configRoutes = require("./routes");
 const bodyParser = require("body-parser");

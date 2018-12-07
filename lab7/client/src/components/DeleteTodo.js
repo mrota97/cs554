@@ -1,7 +1,7 @@
 import React from 'react';
 // import UserName from './UserName';
 
-class CreateTodo extends React.Component {
+class DeleteTodo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -29,27 +29,27 @@ class CreateTodo extends React.Component {
     }
 
     render() {
-        return <div className="create__todo">
-            <h1>Create a Todo</h1>
+        return <div className="delete__todo">
+            <h1>Delete a Todo</h1>
             <form onSubmit={this.handleSubmit}>
-                <div className="create__todo__formgroup">
-                    <label className="create__todo__label">Description</label>
-                    <textarea rows="5" cols="33" name="title" value={this.state.title} onChange={this.handleChange} className="create__todo__title" />
+                <div className="delete__todo__formgroup">
+                    <label className="delete__todo__label">Description</label>
+                    <textarea rows="5" cols="33" name="title" value={this.state.title} onChange={this.handleChange} className="delete__todo__title" />
                 </div>
                 <br />
-                <div className="create__todo__formgroup">
-                    <label className="create__todo__label">Pick a user:</label>
-                    <select name="user" value={this.state.user} onChange={this.handleChange} className="create__todo__assignee">
+                <div className="delete__todo__formgroup">
+                    <label className="delete__todo__label">Pick a user:</label>
+                    <select name="user" value={this.state.user} onChange={this.handleChange} className="delete__todo__assignee">
                         {this.populateOptions(this.props.users)}
                     </select>
                 </div>
                 <br />
-                <div className="create__todo__formgroup">
-                    <input type="submit" value="Submit" className="create__todo__submit" />
+                <div className="delete__todo__formgroup">
+                    <input type="submit" value="Submit" className="delete__todo__submit" />
                 </div>
             </form>
         </div>;
     }
 }
 
-export default CreateTodo;  
+export default DeleteTodo;  

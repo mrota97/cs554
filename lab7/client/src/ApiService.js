@@ -39,6 +39,46 @@ class ApiService {
     }
 
     /**
+     * Generic function to 
+     */
+    async putGraphQlData(method, params, fields) {
+        const query = `mutation { ${method}${this.paramsToString(params)} ${fields}}`
+        const res = await fetch(this.apiUrl, {
+            method: 'POST',
+            mode: 'cors',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }),
+            body: JSON.stringify({query}),
+        });
+        if (res.ok) {
+            const body = await res.json();
+            return body.data;
+        } else {
+            throw new Error(res.status);
+        }
+    }
+
+    async createTodo(params = {}) {
+        const data = await this.putGraphQlData('createTodo', params, this.todoFields);
+        //return todo list
+        return data.todo;
+    }
+
+    async updateTodo(params = {}) {
+        const data = await this.putGraphQlData('updateTodo', params, this.todoFields);
+        //return todo list
+        return data.todo;
+    }
+
+    async deleteTodo(params = {}) {
+        const data = await this.putGraphQlData('deleteTodo', params, this.todoFields);
+        //return todo list
+        return data.todo;
+    }
+
+    /**
      * 
      * @param {object} params
      * @returns {array} users list or empty list
