@@ -11,10 +11,13 @@ class CreateTodoContainer extends React.Component {
         super(props);
         this.state = {
             users: [],
+            todos: [],
             whichComponent: "create", 
         };
         this.retrieveUsers = this.retrieveUsers.bind(this);
+        this.retrieveTodos = this.retrieveTodos.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
+        this.submitUpdateHandler = this.submitUpdateHandler.bind(this);
         this.onNavClick = this.onNavClick.bind(this);
     }
 
@@ -30,6 +33,16 @@ class CreateTodoContainer extends React.Component {
         }
     }
 
+    async retrieveTodos() {
+        try {
+            const todos = await ApiService.getTodos();
+            this.setState({todos});
+            console.log(todos);
+        } catch (e) {
+            console.error(`An error ${e.message} occured while searching todos`);            
+        }
+    }
+
     async submitHandler({title, user}) {
         try {
             var userId = Number.parseInt(user, 10);
@@ -42,8 +55,35 @@ class CreateTodoContainer extends React.Component {
         }
     }
 
+    async submitUpdateHandler({ title, user, id, completed }) {
+        try {
+            var userId = Number.parseInt(user, 10);
+            if (Number.isNaN(userId)) {
+                throw "Error: something went wrong with the userId!"
+            }
+            console.log(id);
+            const updatedTodo = await ApiService.updateTodo({ userId, title, completed, id })
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async submitDeleteHandler({ user, id }) {
+        try {
+            var userId = Number.parseInt(user, 10);
+            if (Number.isNaN(userId)) {
+                throw "Error: something went wrong with the userId!";
+            }
+            console.log(id);
+            const deleteTodo = await ApiService.deleteTodo({ userId, id });
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     async componentDidMount() {
         await this.retrieveUsers();
+        await this.retrieveTodos();
     }
 
     onNavClick(event) {
@@ -65,9 +105,9 @@ class CreateTodoContainer extends React.Component {
                     case "create":
                         return <CreateTodo users={this.state.users} submitHandler={this.submitHandler} />;
                     case "update":
-                        return <UpdateTodo users={this.state.users} submitHandler={this.submitHandler} />;
+                        return <UpdateTodo users={this.state.users} todos={this.state.todos} submitHandler={this.submitUpdateHandler} />;
                     case "delete":
-                        return <DeleteTodo users={this.state.users} submitHandler={this.submitHandler} />;
+                        return <DeleteTodo users={this.state.users} todos={this.state.todos} submitHandler={this.submitDeleteHandler}  />;
                     default:
                         return <p>Something went wrong!</p>;
                 }

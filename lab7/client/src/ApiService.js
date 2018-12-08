@@ -43,6 +43,7 @@ class ApiService {
      */
     async putGraphQlData(method, params, fields) {
         const query = `mutation { ${method}${this.paramsToString(params)} ${fields}}`
+        console.log(query);
         const res = await fetch(this.apiUrl, {
             method: 'POST',
             mode: 'cors',
