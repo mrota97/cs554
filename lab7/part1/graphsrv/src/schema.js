@@ -100,7 +100,7 @@ const TodoRootMutation = new GraphQLObjectType({
             type: TodoType,
             args: {
                 userId: { type: new GraphQLNonNull(GraphQLInt)},
-                title: {type: GraphQLString},
+                title: {type: GraphQLString}
             },
             resolve: (value, { userId, title }) => {        
                 let todo = {
@@ -109,15 +109,49 @@ const TodoRootMutation = new GraphQLObjectType({
                     completed: false,
                     userId: userId
                 }
+                console.log(userId);
                 Todos.push(todo);
                 return todo;
             }
         },
         updateTodo: {
             type: TodoType,
+            args: {
+                userId: { type: new GraphQLNonNull(GraphQLInt)},
+                title: { type: GraphQLString },
+                completed: {type: new GraphQLNonNull(GraphQLBoolean)},
+                id: { type: new GraphQLNonNull(GraphQLString)}
+            },
+            resolve: (value, { userId, title, completed, id}) => {
+                let updatedTodo = {
+                    id: id,
+                    title: title,
+                    completed: completed,
+                    userId: userId
+                }
+                console.log(id);
+                for (var i = 0, len = Todos.length; i < len; i++) {
+                    if (Todos[i].id == id) {
+                        console.log(Todos[i]);
+                        Todos[i] = updatedTodo;
+                    }
+                }
+                return updatedTodo;
+            }
         },
         deleteTodo: {
             type: TodoType,
+            args: {
+                userId: { type: new GraphQLNonNull(GraphQLInt)},
+                id: { type: new GraphQLNonNull(GraphQLString)}
+            },
+            resolve: (value, { userId, id }) => {
+                for (var i = 0, len = Todos.length; i < len; i++) {
+                    if (Todos[i].id == id) {
+                        Todos.splice(i, 1);
+                    }
+                }
+            }
         }
     })
 });
